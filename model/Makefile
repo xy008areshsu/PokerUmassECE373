@@ -6,7 +6,7 @@ CFLAGS=-c $(DEBUG) -std=c++11
 FLAGS =$(DEBUG) -std=c++11
 LDFLAGS=-lncursesw $(DEBUG)
 SOURCES=Hand.cpp Card.cpp ./unittests/test.cpp
-SOURCESTEST=./unittests/test.cpp Hand.cpp
+SOURCESTEST=./unittests/test.cpp Hand.cpp Poker.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTSTEST=$(SOURCESTEST:.cpptest=.o)
 EXECUTABLE=display

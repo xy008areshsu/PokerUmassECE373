@@ -13,6 +13,8 @@ class Hand {
   void set_hand(const std::vector<Card>& hand) {m_cards = hand;} 
 
   bool equal_to(const std::vector<std::string>& vec_s) const;
+  bool equal_to(const Hand& rhs) const;
+  
 
  private:
   std::vector<Card> m_cards;
@@ -26,5 +28,7 @@ inline bool operator!=(const Hand& lhs, const std::vector<std::string>& rhs){ret
 inline bool operator==(const  std::vector<std::string>& lhs, const Hand& rhs){ return rhs.equal_to(lhs); }
 inline bool operator!=(const  std::vector<std::string>& lhs, const Hand& rhs){return !(lhs == rhs);}
 
+inline bool operator==(const Hand& lhs, const Hand& rhs){ return rhs.equal_to(lhs); }
+inline bool operator!=(const Hand& lhs, const Hand& rhs){return !(lhs == rhs);}
 
 #endif

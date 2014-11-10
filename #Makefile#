@@ -3,32 +3,25 @@
 CC=g++
 DEBUG=-g
 CFLAGS=-c $(DEBUG)
-FLAGS= $(DEBUG) -std=c++11
 LDFLAGS=-lncursesw $(DEBUG)
-SOURCES=Hand.cpp Card.cpp ./unittests/test.cpp
-SOURCESTEST=./unittests/test.cpp
+SOURCES=./view/display.cpp ./view/utility.cpp
+SOURCESTEST=Hand.cpp Card.cpp ./unittests/test.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-OBJECTSTEST=$(SOURCESTEST:.cpptest=.o)
 EXECUTABLE=display
 EXECUTABLETEST=test
 
 all: clean $(SOURCES) $(EXECUTABLE)
 test: clean $(SOURCESTEST) $(EXECUTABLETEST)
 
-
 $(EXECUTABLE): $(OBJECTS) 
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
-$(EXECUTABLETEST): $(OBJECTSTEST) 
-	$(CC) $(OBJECTSTEST) $(LDFLAGS) -o $@
+$(EXECEXECUTABLETEST): $(OBJECTS) 
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 
-.cpptest.o:
-	$(CC) $(FLAGS) $< -o $@
-
-
 clean:
-	rm -rf *.o $(EXECUTABLE) $(EXECUTABLETEST)
+	rm -rf *.o $(EXECUTABLE)
 

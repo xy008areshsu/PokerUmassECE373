@@ -1,0 +1,25 @@
+#ifndef CARD_H
+#define CARD_H
+
+#include <string>
+
+
+class Card {
+
+ public:
+ Card(const string& s): m_repr{s} {}
+
+  string get_card() const {return m_repr;}
+  void set_card(const string& s){m_repr = s;}
+
+  
+  
+
+
+
+ private:
+  std::string m_repr;
+}
+
+
+#endif

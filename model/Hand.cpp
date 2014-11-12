@@ -39,12 +39,58 @@ bool Hand::equal_to(const Hand& rhs) const
   
 }
 
-int Hand::rank() const
+vector<int> Hand::rank() const
 {
-  if (is_flush() && is_straight())
-    return 8;
+  vector<int> card_ranks = cards_ranking();
+  vector<int> not_two_pairs {0,0};
+  if (is_flush() && is_straight()){  // straight flush
+    vector<int> res {8, card_ranks[0]};
+    return res;
+  }
+  else if (is_kind_of(4) != 0) { // 4 of a kind
+    vector<int> res {7, is_kind_of(4), is_kind_of(1)};
+    return res;
+  }
+  else if (is_kind_of(2) != 0 && is_kind_of(3) != 0) { // full house
+    vector<int> res {6, is_kind_of(3), is_kind_of(2)};
+    return res;  
+  }
+  else if(is_flush()) { // flush
+    vector<int> res {5};
+    for (auto rank: card_ranks) {
+      res.push_back(rank);
+    }
+    return res;
+  }
+  else if(is_straight()) { // straight
+    vector<int> res {4, card_ranks[0]};
+    return res;
+  }
+  else if(is_kind_of(3) != 0) { // 3 of a kind
+    vector<int> res {3, is_kind_of(3)};
+    for (auto rank: card_ranks)
+      res.push_back(rank);
+    return res;
+  }
+  else if(is_two_pairs() != not_two_pairs) { // 2 of a kind
+    vector<int> res {2, is_two_pairs()[0], is_two_pairs()[1]};
+    for(auto rank: card_ranks)
+      res.push_back(rank);
+    return res;
+  }
+  else if(is_kind_of(2)!= 0) { // one pair
+    vector<int> res {1, is_kind_of(2)};
+    for(auto rank: card_ranks)
+      res.push_back(rank);
+    return res;
+  }
+  else { // nothing
+    vector<int> res {0};
+    for(auto rank: card_ranks)
+      res.push_back(rank);
+    return res;
+  }
 
-  return 0; // TODO
 }
 
 vector<int> Hand::cards_ranking() const
@@ -95,5 +141,34 @@ bool Hand::is_straight() const
 
 int Hand::is_kind_of(int kind) const
 {
-  return -1;
+  vector<int> ranks = cards_ranking();
+  for(auto rank: ranks) {
+    if(count(begin(ranks), end(ranks), rank) == kind)
+      return rank;
+  }
+  return 0;
+}
+
+int Hand::is_kind_of(int kind, const vector<int>& ranks) const
+{
+  for(auto rank: ranks) {
+    if(count(begin(ranks), end(ranks), rank) == kind)
+      return rank;
+  }
+  return 0;  
+}
+
+vector<int> Hand::is_two_pairs() const
+{
+  
+  vector<int> reversed_ranks = cards_ranking();
+  int high_pair = is_kind_of(2);
+  reverse(begin(reversed_ranks), end(reversed_ranks));
+  int low_pair = is_kind_of(2, reversed_ranks);
+  if (low_pair != high_pair) {
+    vector<int> pairs {high_pair, low_pair};
+    return pairs;
+  } 
+  vector<int> p {0, 0};
+  return p;
 }

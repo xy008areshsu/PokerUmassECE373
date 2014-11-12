@@ -17,6 +17,7 @@ bool test_cards_ranking();
 bool test_hand_is_flush();
 bool test_hand_is_straight();
 bool test_hand_is_kind_of();
+bool test_hand_is_two_pairs();
 
 // Helper functions
 vector<Hand> create_hands(const vector<vector<string> >& hands_using_str);
@@ -29,7 +30,8 @@ bool assert_equal(T1 output, T2 expected, string promt);
 
 int main() 
 {
-  if(test_hand_is_kind_of()
+  if(test_hand_is_two_pairs()
+     && test_hand_is_kind_of()
      && test_hand_is_flush()
      && test_hand_is_straight()
      && test_card_initialization() 
@@ -266,14 +268,38 @@ bool test_hand_is_kind_of()
   if(!assert_equal(fk.is_kind_of(1), 7, promt))
     return false;
   
-  if(!assert_equal(fk.is_kind_of(3), -1, promt))
+  if(!assert_equal(fk.is_kind_of(3), 0, promt))
     return false;
 
   return true;
   
 }
 
+bool test_hand_is_two_pairs()
+{
 
+  vector<string> cards {"5S", "5D", "9H", "9C", "6S"};
+  vector<string> cards2 {"1s", "2D", "9H", "8C", "6S"};
+  Hand sp = create_hand(cards);
+  Hand h = create_hand(cards2);
+
+  string promt {"Is two pairs function failed"};
+
+  vector<int> expected_pairs {9, 5};
+  vector<int> expected_pairs2 {0, 0};
+
+  vector<int> actual_pairs = sp.is_two_pairs();
+  vector<int> actual_pairs2 = h.is_two_pairs();
+
+  if(!assert_equal(actual_pairs, expected_pairs, promt))
+    return false;
+
+  if(!assert_equal(actual_pairs2, expected_pairs2, promt))
+    return false;
+
+  return true;
+
+}
 
 
 

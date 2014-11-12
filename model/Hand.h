@@ -13,10 +13,13 @@ class Hand {
 
   std::vector<Card> get_hand() const {return m_cards;}
   void set_hand(const std::vector<Card>& hand) {m_cards = hand;} 
-  int rank() const;
+  vector<int> rank() const;
   bool is_flush() const;
   bool is_straight() const;
   int is_kind_of(int kind) const;
+  int is_kind_of(int kind, const vector<int>& ranks) const;
+  vector<int> is_two_pairs() const;
+  
   
   vector<int> cards_ranking() const;
 

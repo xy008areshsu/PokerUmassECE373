@@ -1,25 +1,43 @@
 #include "../Card.h"
 #include "../Hand.h"
 #include "../Poker.h"
+#include "../../utility/util.h"
 
 #include <iostream>
 
 using namespace std;
 
+
 bool test_card_initialization();
 bool test_hand_initialization();
 bool test_equal_function_in_hand_class();
 bool test_poker_init_set_and_get();
+bool test_poker_best_hand();
+bool test_cards_ranking();
+bool test_hand_is_flush();
+bool test_hand_is_straight();
+bool test_hand_is_kind_of();
 
 // Helper functions
 vector<Hand> create_hands(const vector<vector<string> >& hands_using_str);
 Hand create_hand(const vector<string>& hand_using_str);
 
+template<class T1, class T2>
+bool assert_equal(T1 output, T2 expected, string promt); 
+
+
+
 int main() 
 {
-  if(test_card_initialization() && test_hand_initialization()
+  if(test_hand_is_kind_of()
+     && test_hand_is_flush()
+     && test_hand_is_straight()
+     && test_card_initialization() 
+     && test_hand_initialization()
      && test_equal_function_in_hand_class()
-     && test_poker_init_set_and_get())
+     && test_poker_init_set_and_get()
+     && test_poker_best_hand()
+     && test_cards_ranking())
     cout << "All tests passed" << endl;
 
   return 0;
@@ -124,7 +142,136 @@ bool test_poker_init_set_and_get()
 }
 
 
+bool test_poker_best_hand()
+{
+  
+  vector<string> sf {"6C", "7C", "8C", "9C", "TC"};
+  vector<string> fk {"9D", "9H", "9S", "9C", "7D"};
+  vector<string> fh {"TD", "TC", "TH", "7C", "7D"};
+  vector<vector<string> > hands_str {sf, fk, fh};
+  vector<vector<string> > hands_str2 {fk, fh};
+  vector<vector<string> > hands_str3 {fh, fh};
+  vector<vector<string> > hands_str4 {fh};
+  vector<vector<string> > hands_str5 {sf};
+  for(int i = 0; i < 100; ++i)
+    hands_str5.push_back(fh);
+  vector<Hand> hands = create_hands(hands_str);
+  vector<Hand> hands2 = create_hands(hands_str2);
+  vector<Hand> hands3 = create_hands(hands_str3);
+  vector<Hand> hands4 = create_hands(hands_str4);
+  vector<Hand> hands5 = create_hands(hands_str5);
+  
+  
+  Poker p {hands};
 
+  
+  Hand best_hand = p.best_hand();
+  if(!assert_equal(best_hand, sf, "Best hand function failed"))
+    return false;
+  
+  p.set_hands(hands2);
+  best_hand = p.best_hand();
+  if(!assert_equal(best_hand, fk, "Best hand function failed"))
+    return false;
+  
+  p.set_hands(hands3);
+  best_hand = p.best_hand();
+  if(!assert_equal(best_hand, fh, "Best hand function failed"))
+    return false;
+
+  p.set_hands(hands4);
+  best_hand = p.best_hand();
+  if(!assert_equal(best_hand, fh, "Best hand function failed"))
+    return false;
+
+  p.set_hands(hands5);
+  best_hand = p.best_hand();
+  if(!assert_equal(best_hand, sf, "Best hand function failed"))
+    return false;
+  
+  return true;
+
+}
+
+template<class T1, class T2>
+bool assert_equal(T1 output, T2 expected, string promt) 
+{
+  if (output != expected) {
+    cout << promt << endl << "expected to be: " << expected << endl << "Actual output: " << output << endl;
+    return false;
+  }
+  return true;
+}
+  
+bool test_cards_ranking()
+{
+  Hand h1 = create_hand({"AC", "3D", "4S", "KH"});
+
+  vector<int> expected_rankings {14, 13, 4, 3};
+
+  vector<int> actual_rankings = h1.cards_ranking();
+
+  if(!assert_equal(actual_rankings, expected_rankings, "Cards Ranking Failed!"))
+    return false;
+  return true;
+}
+ 
+bool test_hand_is_flush()
+{
+  vector<string> sf {"6C", "7C", "8C", "9C", "TC"};
+  vector<string> fk {"9D", "9H", "9S", "9C", "7D"};
+
+  Hand h1 = create_hand(sf);
+  Hand h2 = create_hand(fk);
+  string promt {"Is Flush function failed!"};
+  if(!assert_equal(h1.is_flush(), true, promt))
+    return false;
+  if(!assert_equal(h2.is_flush(), false, promt))
+    return false;
+
+  return true;
+
+}
+
+bool test_hand_is_straight()
+{
+  vector<string> cards {"9C", "8C", "7C", "6C", "5C"};
+  vector<string> cards2 {"9C", "8C", "8H", "6C", "5C"};
+
+  Hand h1 = create_hand(cards);
+  Hand h2 = create_hand(cards2);
+  string promt = "Is Straight function failed";
+  if(!assert_equal(h1.is_straight(), true, promt))
+    return false;
+
+  if(!assert_equal(h2.is_straight(), false, promt))
+    return false;
+
+  return true;
+  
+  
+}
+
+bool test_hand_is_kind_of()
+{
+  
+  vector<string> cards {"9D", "9H", "9S", "9C", "7D"};
+  Hand fk = create_hand(cards);
+  
+  string promt {"Is Kind function failed"};
+
+  if(!assert_equal(fk.is_kind_of(4), 9, promt))
+    return false;
+
+  if(!assert_equal(fk.is_kind_of(1), 7, promt))
+    return false;
+  
+  if(!assert_equal(fk.is_kind_of(3), -1, promt))
+    return false;
+
+  return true;
+  
+}
 
 
 

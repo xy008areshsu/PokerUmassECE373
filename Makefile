@@ -5,7 +5,7 @@ DEBUG=-g
 CFLAGS=-c $(DEBUG)
 FLAGS= $(DEBUG) -std=c++11
 LDFLAGS=-lncursesw $(DEBUG)
-SOURCES=Hand.cpp Card.cpp ./unittests/test.cpp
+SOURCES=Hand.cpp Card.cpp ./unittests/test.cpp ./utility/util.cpp
 SOURCESTEST=./unittests/test.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTSTEST=$(SOURCESTEST:.cpptest=.o)

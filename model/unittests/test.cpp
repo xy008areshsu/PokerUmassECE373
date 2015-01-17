@@ -18,6 +18,7 @@ bool test_hand_is_flush();
 bool test_hand_is_straight();
 bool test_hand_is_kind_of();
 bool test_hand_is_two_pairs();
+bool test_A1234_straight();
 
 // Helper functions
 vector<Hand> create_hands(const vector<vector<string> >& hands_using_str);
@@ -30,7 +31,8 @@ bool assert_equal(T1 output, T2 expected, string promt);
 
 int main() 
 {
-  if(test_hand_is_two_pairs()
+  if(test_A1234_straight()
+     && test_hand_is_two_pairs()
      && test_hand_is_kind_of()
      && test_hand_is_flush()
      && test_hand_is_straight()
@@ -299,6 +301,19 @@ bool test_hand_is_two_pairs()
 
   return true;
 
+}
+
+
+bool test_A1234_straight()
+{
+  vector<string> s1 {"AS", "2S", "3C", "4D", "5D"};
+  Hand h1 = create_hand(s1);
+
+  if(!assert_equal(h1.is_straight(), true, "A 1 2 3 4 should be a straight!")) {
+    cout << h1.cards_ranking()[0] << endl << h1.cards_ranking()[1] << endl << h1.cards_ranking()[2] << endl << h1.cards_ranking()[3] << endl << h1.cards_ranking()[4] << endl;
+    return false;
+  }
+  return true;
 }
 
 

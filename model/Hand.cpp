@@ -57,9 +57,7 @@ vector<int> Hand::rank() const
   }
   else if(is_flush()) { // flush
     vector<int> res {5};
-    for (auto rank: card_ranks) {
-      res.push_back(rank);
-    }
+    copy(begin(card_ranks), end(card_ranks), back_inserter(res));
     return res;
   }
   else if(is_straight()) { // straight
@@ -68,26 +66,22 @@ vector<int> Hand::rank() const
   }
   else if(is_kind_of(3) != 0) { // 3 of a kind
     vector<int> res {3, is_kind_of(3)};
-    for (auto rank: card_ranks)
-      res.push_back(rank);
+    copy(begin(card_ranks), end(card_ranks), back_inserter(res));
     return res;
   }
   else if(is_two_pairs() != not_two_pairs) { // 2 of a kind
     vector<int> res {2, is_two_pairs()[0], is_two_pairs()[1]};
-    for(auto rank: card_ranks)
-      res.push_back(rank);
+    copy(begin(card_ranks), end(card_ranks), back_inserter(res));
     return res;
   }
   else if(is_kind_of(2)!= 0) { // one pair
     vector<int> res {1, is_kind_of(2)};
-    for(auto rank: card_ranks)
-      res.push_back(rank);
+    copy(begin(card_ranks), end(card_ranks), back_inserter(res));
     return res;
   }
   else { // nothing
     vector<int> res {0};
-    for(auto rank: card_ranks)
-      res.push_back(rank);
+    copy(begin(card_ranks), end(card_ranks), back_inserter(res));
     return res;
   }
 
@@ -114,13 +108,18 @@ vector<int> Hand::cards_ranking() const
     rankings.push_back(rank_int);
   }
   sort(begin(rankings), end(rankings), greater<int>());
+  vector<int> r {14, 5, 4, 3, 2};
+  vector<int> r2 {5, 4, 3, 2, 1};
+  if (rankings == r)
+    rankings = r2;
+
   return rankings;
 }
 
 bool Hand::is_flush() const
 {
   string suit = m_cards[0].get_card().substr(1, 1);
-  for (Card card: m_cards) {
+  for (auto card: m_cards) {
     string suit2 = card.get_card().substr(1, 1);
     if (suit != suit2)
       return false;
